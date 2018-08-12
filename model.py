@@ -72,24 +72,4 @@ class DynamicEmotions():
 		example = np.concatenate([ex for i in range(n_emotions)])
 		print(np.sum(np.square(example-m_batch), -1))
 		for i in range(n_examples):
-			distance, r_array, m_batch = sess.run([self.distance, self.r, self.e_plus], feed_dict={self.m: example, self.e: m_batch, self.alpha: 1.0})
-			for j in range(n_emotions):
-				print(" ".join(["Emotion", str(j), "Distance:", str(distance[j]), "Reward:", str(np.mean(r_array[j]))]))
-			print("-----")
-
-class StimulusToEmotion():
-	def __init__(self, projection_pickle_dir, stimulus, sess, state_size=64):
-		variable_data = pickle.load(open(projection_pickle_dir, "rb"))
-		w = variable_data["pca_weights"]
-		b = variable_data["pca_biases"]
-		self.projected_stimulus = tf.contrib.layers.fully_connected(stimulus, state_size, activation_fn=None, scope="pca")
-		with tf.variable_scope("pca", reuse=True) as scope:
-			self.w = tf.get_variable("weights")
-			self.b = tf.get_variable("biases")
-		uw = tf.assign(self.w, w)
-		ub = tf.assign(self.b, b)
-		sess.run([uw, ub])
-
-	def get_trainable_vars(self):
-		return (self.w, self.b)
-
+			distance, r_array, m_batch = sess.run([self.distance, self.r, self.e_plus], feed_dict={self.m: example, self.e: m_batch, 
